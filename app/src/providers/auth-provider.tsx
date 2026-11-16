@@ -23,13 +23,13 @@ const AuthContext = createContext<AuthContextValue | null>(null);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [session, setSession] = useState<Session | null>(null);
-  const [perfil, setPerfil] = useState<Perfil | null>(null);
+  const [perfilCargado, setPerfilCargado] = useState<Perfil | null>(null);
   const [cargando, setCargando] = useState(supabaseConfigurado);
 
   const cargarPerfil = useCallback(async (userId: string | undefined) => {
-    if (!userId) return setPerfil(null);
+    if (!userId) return;
     const { data } = await supabase.from('perfiles').select('*').eq('id', userId).maybeSingle();
-    setPerfil(data);
+    setPerfilCargado(data);
   }, []);
 
   useEffect(() => {
@@ -46,8 +46,23 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const userId = session?.user.id;
   useEffect(() => {
-    cargarPerfil(userId);
-  }, [userId, cargarPerfil]);
+    if (!userId) return;
+    let activo = true;
+    supabase
+      .from('perfiles')
+      .select('*')
+      .eq('id', userId)
+      .maybeSingle()
+      .then(({ data }) => {
+        if (activo) setPerfilCargado(data);
+      });
+    return () => {
+      activo = false;
+    };
+  }, [userId]);
+
+  // El perfil solo es válido si corresponde a la sesión actual
+  const perfil = perfilCargado && perfilCargado.id === userId ? perfilCargado : null;
 
   const value = useMemo<AuthContextValue>(
     () => ({

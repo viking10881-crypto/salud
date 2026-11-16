@@ -1,5 +1,5 @@
 import { THEME } from '@/lib/theme';
-import { Tabs } from 'expo-router';
+import { Tabs } from 'expo-router/tabs';
 import { FolderHeart, HeartPulse, House, Settings } from 'lucide-react-native';
 import { useColorScheme } from 'nativewind';
 
