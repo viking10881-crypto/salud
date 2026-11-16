@@ -1,0 +1,12 @@
+# Dependencias
+node_modules/
+
+# Respaldo local del proyecto SDK 58 (no se versiona)
+app-sdk58-respaldo/
+
+# Variables de entorno
+.env
+.env*.local
+
+# Sistema
+.DS_Store

@@ -1,0 +1,82 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  /* Salud+ — morado, blanco y rosado */
+  :root {
+    --background: 260 60% 98%;
+    --foreground: 258 40% 16%;
+    --card: 0 0% 100%;
+    --card-foreground: 258 40% 16%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 258 40% 16%;
+    --primary: 262 72% 52%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 262 70% 95%;
+    --secondary-foreground: 262 60% 35%;
+    --muted: 260 40% 95%;
+    --muted-foreground: 258 15% 45%;
+    --accent: 262 70% 94%;
+    --accent-foreground: 262 60% 35%;
+    --destructive: 352 80% 55%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 260 40% 90%;
+    --input: 260 40% 88%;
+    --ring: 262 72% 60%;
+    --radius: 1rem;
+
+    --heart: 340 82% 58%;
+    --citas: 215 90% 93%;
+    --citas-foreground: 222 75% 45%;
+    --meds: 145 55% 90%;
+    --meds-foreground: 145 60% 30%;
+    --examenes: 268 75% 93%;
+    --examenes-foreground: 268 60% 42%;
+    --salud: 32 95% 90%;
+    --salud-foreground: 25 90% 45%;
+    --alerta: 335 90% 95%;
+    --alerta-foreground: 345 75% 45%;
+  }
+
+  .dark:root {
+    --background: 258 35% 8%;
+    --foreground: 260 40% 96%;
+    --card: 258 30% 12%;
+    --card-foreground: 260 40% 96%;
+    --popover: 258 30% 12%;
+    --popover-foreground: 260 40% 96%;
+    --primary: 262 80% 68%;
+    --primary-foreground: 258 40% 10%;
+    --secondary: 260 25% 18%;
+    --secondary-foreground: 260 40% 92%;
+    --muted: 260 25% 18%;
+    --muted-foreground: 260 15% 68%;
+    --accent: 260 25% 20%;
+    --accent-foreground: 260 40% 92%;
+    --destructive: 352 70% 60%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 260 22% 22%;
+    --input: 260 22% 24%;
+    --ring: 262 80% 68%;
+
+    --heart: 340 80% 65%;
+    --citas: 220 40% 20%;
+    --citas-foreground: 215 90% 75%;
+    --meds: 145 30% 18%;
+    --meds-foreground: 145 55% 65%;
+    --examenes: 268 30% 22%;
+    --examenes-foreground: 268 80% 80%;
+    --salud: 28 40% 18%;
+    --salud-foreground: 30 90% 65%;
+    --alerta: 340 35% 18%;
+    --alerta-foreground: 340 85% 75%;
+  }
+}
+
+@layer base {
+  html [class*='css-text-'],
+  html [class*='css-textinput-'] {
+    font-family: inherit;
+  }
+}
