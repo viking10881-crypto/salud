@@ -26,3 +26,4 @@ npx expo start
 ```
 
 Escanea el código QR con **Expo Go** (versión compatible con SDK 54).
+# salud
