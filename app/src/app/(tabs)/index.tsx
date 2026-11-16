@@ -3,8 +3,9 @@ import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Icon } from '@/components/ui/icon';
 import { Text } from '@/components/ui/text';
-import { citas, dosis, formatoFecha, formatoHora, usuario } from '@/data/mock';
+import { citas, dosis, formatoFecha, formatoHora } from '@/data/mock';
 import { cn } from '@/lib/utils';
+import { useAuth } from '@/providers/auth-provider';
 import { type Href, router } from 'expo-router';
 import {
   Bell,
@@ -26,6 +27,8 @@ const MODULOS: { titulo: string; icon: LucideIcon; href: Href; bg: string; fg: s
 ];
 
 export default function Inicio() {
+  const { perfil } = useAuth();
+  const nombre = perfil?.nombre || 'bienvenido';
   const proximaCita = citas[0];
   const proximaDosis = dosis[0];
 
@@ -35,7 +38,7 @@ export default function Inicio() {
         {/* Encabezado con la doctora virtual */}
         <View className="flex-row items-center justify-between pt-2">
           <View className="flex-1 gap-1">
-            <Text className="text-3xl font-bold">Hola, {usuario.nombre}</Text>
+            <Text className="text-3xl font-bold">Hola, {nombre}</Text>
             <Text className="text-muted-foreground">Cuida tu salud, siempre</Text>
           </View>
           <Button variant="secondary" size="icon" className="rounded-full" accessibilityLabel="Notificaciones">

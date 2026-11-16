@@ -1,26 +1,35 @@
+import { Aviso } from '@/components/aviso';
+import { Campo } from '@/components/campo';
 import { DoctoraAvatar } from '@/components/doctora-avatar';
 import { Logo } from '@/components/logo';
 import { Button } from '@/components/ui/button';
-import { Checkbox } from '@/components/ui/checkbox';
-import { Icon } from '@/components/ui/icon';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
 import { Text } from '@/components/ui/text';
-import { router } from 'expo-router';
-import { Eye, EyeOff, Lock, Mail } from 'lucide-react-native';
+import { correoValido } from '@/lib/validacion';
+import { useAuth } from '@/providers/auth-provider';
+import { Link } from 'expo-router';
+import { Lock, Mail } from 'lucide-react-native';
 import { useState } from 'react';
-import { KeyboardAvoidingView, Platform, Pressable, ScrollView, View } from 'react-native';
+import { ActivityIndicator, KeyboardAvoidingView, Platform, ScrollView, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function Login() {
+  const { iniciarSesion } = useAuth();
   const [correo, setCorreo] = useState('');
   const [clave, setClave] = useState('');
-  const [verClave, setVerClave] = useState(false);
-  const [recordar, setRecordar] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [enviando, setEnviando] = useState(false);
 
-  // TODO(fase 2): reemplazar por Supabase Auth
-  const iniciarSesion = () => router.replace('/(tabs)');
+  const enviar = async () => {
+    if (!correoValido(correo)) return setError('Escribe un correo válido.');
+    if (!clave) return setError('Escribe tu contraseña.');
+    setError(null);
+    setEnviando(true);
+    const r = await iniciarSesion(correo, clave);
+    setEnviando(false);
+    // Si no hay error, la navegación cambia sola (Stack.Protected)
+    if (r.error) setError(r.error);
+  };
 
   return (
     <SafeAreaView className="flex-1 bg-background">
@@ -33,48 +42,39 @@ export default function Login() {
           </View>
 
           <View className="gap-3">
-            <View className="flex-row items-center rounded-2xl border border-input bg-card px-4">
-              <Icon as={Mail} size={20} className="text-muted-foreground" />
-              <Input
-                className="h-14 flex-1 border-0 bg-transparent shadow-none dark:bg-transparent"
-                placeholder="Correo electrónico"
-                keyboardType="email-address"
-                autoCapitalize="none"
-                autoComplete="email"
-                value={correo}
-                onChangeText={setCorreo}
-              />
-            </View>
-            <View className="flex-row items-center rounded-2xl border border-input bg-card px-4">
-              <Icon as={Lock} size={20} className="text-muted-foreground" />
-              <Input
-                className="h-14 flex-1 border-0 bg-transparent shadow-none dark:bg-transparent"
-                placeholder="Contraseña"
-                secureTextEntry={!verClave}
-                autoComplete="password"
-                value={clave}
-                onChangeText={setClave}
-              />
-              <Pressable onPress={() => setVerClave((v) => !v)} hitSlop={12} accessibilityLabel="Mostrar contraseña">
-                <Icon as={verClave ? Eye : EyeOff} size={20} className="text-muted-foreground" />
-              </Pressable>
-            </View>
+            <Campo
+              icon={Mail}
+              placeholder="Correo electrónico"
+              keyboardType="email-address"
+              autoCapitalize="none"
+              autoComplete="email"
+              textContentType="emailAddress"
+              value={correo}
+              onChangeText={setCorreo}
+              editable={!enviando}
+            />
+            <Campo
+              icon={Lock}
+              clave
+              placeholder="Contraseña"
+              autoComplete="current-password"
+              textContentType="password"
+              value={clave}
+              onChangeText={setClave}
+              onSubmitEditing={enviar}
+              editable={!enviando}
+            />
+            <Link href="/recuperar" asChild>
+              <Button variant="link" size="sm" className="self-end px-0">
+                <Text>¿Olvidaste tu contraseña?</Text>
+              </Button>
+            </Link>
           </View>
 
-          <View className="flex-row items-center justify-between">
-            <View className="flex-row items-center gap-2">
-              <Checkbox checked={recordar} onCheckedChange={setRecordar} aria-labelledby="recordar" />
-              <Label nativeID="recordar" onPress={() => setRecordar((v) => !v)}>
-                Recordar mi cuenta
-              </Label>
-            </View>
-            <Button variant="link" size="sm" className="px-0">
-              <Text>¿Olvidaste tu contraseña?</Text>
-            </Button>
-          </View>
+          {error && <Aviso>{error}</Aviso>}
 
-          <Button size="lg" className="h-14 rounded-full" onPress={iniciarSesion}>
-            <Text className="text-lg">Iniciar sesión</Text>
+          <Button size="lg" className="h-14 rounded-full" onPress={enviar} disabled={enviando}>
+            {enviando ? <ActivityIndicator color="white" /> : <Text className="text-lg">Iniciar sesión</Text>}
           </Button>
 
           <View className="flex-row items-center gap-3">
@@ -84,20 +84,21 @@ export default function Login() {
           </View>
 
           <View className="gap-3">
-            <Button variant="outline" size="lg" className="h-12 rounded-full">
-              <Text className="font-bold text-[#4285F4]">G</Text>
-              <Text>Continuar con Google</Text>
+            <Button variant="outline" size="lg" className="h-12 rounded-full" disabled>
+              <Text>Continuar con Google (próximamente)</Text>
             </Button>
-            <Button variant="outline" size="lg" className="h-12 rounded-full">
-              <Text>Continuar con Apple</Text>
+            <Button variant="outline" size="lg" className="h-12 rounded-full" disabled>
+              <Text>Continuar con Apple (próximamente)</Text>
             </Button>
           </View>
 
           <View className="flex-row items-center justify-center">
             <Text variant="muted">¿No tienes una cuenta? </Text>
-            <Button variant="link" size="sm" className="px-0">
-              <Text className="font-semibold">Regístrate</Text>
-            </Button>
+            <Link href="/registro" asChild>
+              <Button variant="link" size="sm" className="px-0">
+                <Text className="font-semibold">Regístrate</Text>
+              </Button>
+            </Link>
           </View>
         </ScrollView>
       </KeyboardAvoidingView>

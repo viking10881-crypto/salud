@@ -4,9 +4,8 @@ import { Icon } from '@/components/ui/icon';
 import { Separator } from '@/components/ui/separator';
 import { Switch } from '@/components/ui/switch';
 import { Text } from '@/components/ui/text';
-import { usuario } from '@/data/mock';
 import { cn } from '@/lib/utils';
-import { router } from 'expo-router';
+import { useAuth } from '@/providers/auth-provider';
 import { Bell, ChevronRight, CircleHelp, LogOut, type LucideIcon, Moon, UserRound } from 'lucide-react-native';
 import { useColorScheme } from 'nativewind';
 import { Fragment, useState } from 'react';
@@ -36,7 +35,9 @@ function Fila({
 }
 
 export default function Perfil() {
+  const { session, perfil, cerrarSesion } = useAuth();
   const { colorScheme, setColorScheme } = useColorScheme();
+  const nombreCompleto = [perfil?.nombre, perfil?.apellido].filter(Boolean).join(' ') || 'Mi cuenta';
   const [notificaciones, setNotificaciones] = useState(true);
   const oscuro = colorScheme === 'dark';
 
@@ -55,7 +56,7 @@ export default function Perfil() {
       right={<Switch checked={oscuro} onCheckedChange={(v) => setColorScheme(v ? 'dark' : 'light')} />}
     />,
     <Fila key="ayuda" icon={CircleHelp} label="Ayuda y Soporte" onPress={() => {}} />,
-    <Fila key="salir" icon={LogOut} label="Cerrar Sesión" danger onPress={() => router.replace('/login')} />,
+    <Fila key="salir" icon={LogOut} label="Cerrar Sesión" danger onPress={cerrarSesion} />,
   ];
 
   return (
@@ -64,10 +65,8 @@ export default function Perfil() {
         <Text variant="h3" className="text-center">Mi Perfil</Text>
         <View className="items-center gap-2">
           <DoctoraAvatar size={130} />
-          <Text className="text-xl font-bold">
-            {usuario.nombre} {usuario.apellido}
-          </Text>
-          <Text variant="muted">{usuario.correo}</Text>
+          <Text className="text-xl font-bold">{nombreCompleto}</Text>
+          <Text variant="muted">{session?.user.email}</Text>
         </View>
         <Card className="gap-0 overflow-hidden rounded-3xl py-0">
           {filas.map((f, i) => (

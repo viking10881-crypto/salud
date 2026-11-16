@@ -1,6 +1,4 @@
-// Datos de ejemplo mientras se conecta Supabase (fase 2).
-
-export type Usuario = { nombre: string; apellido: string; correo: string };
+// Datos de ejemplo: se reemplazarán por consultas a Supabase en cada módulo.
 
 export type Cita = {
   id: string;
@@ -21,8 +19,6 @@ export type Dosis = {
 };
 
 export type Examen = { id: string; titulo: string; fecha: string; tipo: 'imagen' | 'laboratorio' | 'pdf' };
-
-export const usuario: Usuario = { nombre: 'María', apellido: 'López', correo: 'maria@correo.com' };
 
 export const citas: Cita[] = [
   {
