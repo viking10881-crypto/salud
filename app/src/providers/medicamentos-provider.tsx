@@ -50,7 +50,7 @@ export function MedicamentosProvider({ children }: { children: React.ReactNode }
     setDatos(d);
     setError(null);
     setAhora(new Date());
-    sincronizarRecordatorios(d.meds).catch(() => {});
+    sincronizarRecordatorios(d.meds, d.tomas).catch(() => {});
   }, []);
 
   // Cargar al iniciar sesión (y en cada recarga); al cerrar sesión, quitar los avisos del teléfono

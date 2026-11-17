@@ -7,6 +7,8 @@ import { ManejadorNotificaciones } from '@/components/manejador-notificaciones';
 import { supabaseConfigurado } from '@/lib/supabase';
 import { NAV_THEME } from '@/lib/theme';
 import { AuthProvider, useAuth } from '@/providers/auth-provider';
+import { CitasProvider } from '@/providers/citas-provider';
+import { ExamenesProvider } from '@/providers/examenes-provider';
 import { MedicamentosProvider } from '@/providers/medicamentos-provider';
 import { PortalHost } from '@rn-primitives/portal';
 import { SplashScreen, Stack, ThemeProvider } from 'expo-router';
@@ -28,7 +30,11 @@ export default function RootLayout() {
       {supabaseConfigurado ? (
         <AuthProvider>
           <MedicamentosProvider>
-            <Navegacion />
+            <CitasProvider>
+              <ExamenesProvider>
+                <Navegacion />
+              </ExamenesProvider>
+            </CitasProvider>
           </MedicamentosProvider>
         </AuthProvider>
       ) : (
@@ -68,7 +74,9 @@ function Navegacion() {
           <Stack.Screen name="medicamentos" />
           <Stack.Screen name="medicamento" />
           <Stack.Screen name="citas" />
+          <Stack.Screen name="cita" />
           <Stack.Screen name="examenes" />
+          <Stack.Screen name="examen" />
         </Stack.Protected>
       </Stack>
     </>

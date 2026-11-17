@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "Salud+",
+    "name": "Salud en tus manos",
     "slug": "salud-plus",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -30,7 +30,7 @@
         "expo-splash-screen",
         {
           "image": "./assets/images/splash-icon.png",
-          "imageWidth": 200,
+          "imageWidth": 180,
           "resizeMode": "contain",
           "backgroundColor": "#F7F5FE",
           "dark": {
@@ -46,7 +46,14 @@
           "color": "#7C3AED"
         }
       ],
-      "expo-web-browser"
+      "expo-web-browser",
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "Salud+ necesita acceso a tus fotos para adjuntar ex\u00e1menes m\u00e9dicos.",
+          "cameraPermission": "Salud+ necesita la c\u00e1mara para fotografiar tus ex\u00e1menes y f\u00f3rmulas m\u00e9dicas."
+        }
+      ]
     ],
     "experiments": {
       "typedRoutes": true,

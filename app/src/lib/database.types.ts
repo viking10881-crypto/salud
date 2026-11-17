@@ -1,3 +1,5 @@
+import type { TipoCita } from '@/lib/tipos-cita';
+
 // Tipos del esquema de supabase/migrations/20261116000000_esquema_inicial.sql
 // Se pueden regenerar con: npx supabase gen types typescript --project-id <id> > src/lib/database.types.ts
 
@@ -19,7 +21,7 @@ export type Cita = {
   user_id: string;
   fecha: string;
   especialidad: string;
-  tipo: 'general' | 'odontologia' | 'especialista';
+  tipo: TipoCita;
   doctor: string | null;
   lugar: string | null;
   notas: string | null;

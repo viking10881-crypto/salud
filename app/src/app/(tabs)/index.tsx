@@ -3,10 +3,10 @@ import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Icon } from '@/components/ui/icon';
 import { Text } from '@/components/ui/text';
-import { citas, formatoFecha, formatoHora } from '@/data/mock';
 import { DIAS_LARGOS, formatoHoraDate, mismoDia } from '@/lib/fechas';
 import { cn } from '@/lib/utils';
 import { useAuth } from '@/providers/auth-provider';
+import { useCitas } from '@/providers/citas-provider';
 import { useMedicamentos } from '@/providers/medicamentos-provider';
 import { type Href, router } from 'expo-router';
 import {
@@ -21,6 +21,12 @@ import {
 import { Pressable, ScrollView, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
+const fechaCortaFmt = new Intl.DateTimeFormat('es', { weekday: 'short', day: 'numeric', month: 'short' });
+const fechaCitaFmt = (iso: string) => {
+  const s = fechaCortaFmt.format(new Date(iso)).replace(/\./g, '');
+  return s.charAt(0).toUpperCase() + s.slice(1);
+};
+
 const MODULOS: { titulo: string; icon: LucideIcon; href: Href; bg: string; fg: string }[] = [
   { titulo: 'Mis Citas', icon: CalendarDays, href: '/citas', bg: 'bg-citas', fg: 'text-citas-foreground' },
   { titulo: 'Medicamentos', icon: Pill, href: '/medicamentos', bg: 'bg-meds', fg: 'text-meds-foreground' },
@@ -31,7 +37,7 @@ const MODULOS: { titulo: string; icon: LucideIcon; href: Href; bg: string; fg: s
 export default function Inicio() {
   const { perfil } = useAuth();
   const nombre = perfil?.nombre || 'bienvenido';
-  const proximaCita = citas[0];
+  const { proxima: proximaCita } = useCitas();
   const { proxima, dosisHoy } = useMedicamentos();
   const cuandoDosis = proxima
     ? mismoDia(proxima.programada, new Date())
@@ -80,8 +86,16 @@ export default function Inicio() {
             </View>
             <View className="flex-1">
               <Text className="text-sm text-muted-foreground">Próxima cita médica</Text>
-              <Text className="text-lg font-bold">{formatoFecha(proximaCita.fecha)}</Text>
-              <Text>{formatoHora(proximaCita.fecha)}</Text>
+              {proximaCita ? (
+                <>
+                  <Text className="text-lg font-bold">{fechaCitaFmt(proximaCita.fecha)}</Text>
+                  <Text>
+                    {formatoHoraDate(new Date(proximaCita.fecha))} · {proximaCita.especialidad}
+                  </Text>
+                </>
+              ) : (
+                <Text className="text-lg font-bold">Agrega tus citas</Text>
+              )}
             </View>
             <Icon as={ChevronRight} size={22} className="text-muted-foreground" />
           </Card>
