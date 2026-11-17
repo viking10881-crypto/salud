@@ -1,7 +1,7 @@
 import { mensajeError } from '@/lib/auth-errors';
 import type { Medicamento, Toma } from '@/lib/database.types';
 import { type Dosis, dosisDelDia, proximaDosis } from '@/lib/dosis';
-import { inicioDelDia, sumarDias } from '@/lib/fechas';
+import { aFechaISO, inicioDelDia, sumarDias } from '@/lib/fechas';
 import * as api from '@/lib/medicamentos-api';
 import { cancelarRecordatoriosMedicamentos, sincronizarRecordatorios } from '@/lib/notificaciones';
 import { useAuth } from '@/providers/auth-provider';
@@ -17,6 +17,8 @@ type Ctx = {
   medicamentos: Medicamento[];
   tomas: Toma[];
   dosisHoy: Dosis[];
+  /** Tratamientos con fecha de fin ya pasada (los más recientes primero) */
+  terminados: Medicamento[];
   proxima: Dosis | null;
   cargando: boolean;
   error: string | null;
@@ -90,6 +92,9 @@ export function MedicamentosProvider({ children }: { children: React.ReactNode }
       medicamentos,
       tomas,
       dosisHoy: dosisDelDia(medicamentos, tomas, ahora, ahora),
+      terminados: medicamentos
+        .filter((m) => m.fecha_fin !== null && m.fecha_fin < aFechaISO(ahora))
+        .sort((a, b) => (b.fecha_fin ?? '').localeCompare(a.fecha_fin ?? '')),
       proxima: proximaDosis(medicamentos, tomas, ahora),
       cargando: Boolean(userId) && !actuales && !errorActual,
       error: errorActual,

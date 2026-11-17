@@ -11,6 +11,7 @@ type Props = {
   valor: Date;
   onSeleccion: (fecha: Date) => void;
   minimo?: Date;
+  maximo?: Date;
   titulo?: string;
   /** El disparador (botón, chip…). Recibe `abrir`. */
   children: (abrir: () => void) => React.ReactNode;
@@ -22,7 +23,7 @@ type Props = {
  * - iOS: panel inferior con la ruedita y botón "Listo".
  * - Web (desarrollo): campo de texto.
  */
-export function SelectorFechaHora({ modo, valor, onSeleccion, minimo, titulo, children }: Props) {
+export function SelectorFechaHora({ modo, valor, onSeleccion, minimo, maximo, titulo, children }: Props) {
   const [abierto, setAbierto] = useState(false);
   const [temporal, setTemporal] = useState(valor);
   const [texto, setTexto] = useState('');
@@ -34,6 +35,7 @@ export function SelectorFechaHora({ modo, valor, onSeleccion, minimo, titulo, ch
         mode: modo,
         is24Hour: false,
         minimumDate: minimo,
+        maximumDate: maximo,
         onValueChange: (_e, fecha) => onSeleccion(fecha),
       });
       return;
@@ -82,6 +84,7 @@ export function SelectorFechaHora({ modo, valor, onSeleccion, minimo, titulo, ch
                 mode={modo}
                 display={modo === 'time' ? 'spinner' : 'inline'}
                 minimumDate={minimo}
+                maximumDate={maximo}
                 locale="es"
                 onValueChange={(_e, fecha) => setTemporal(fecha)}
               />

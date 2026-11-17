@@ -5,8 +5,9 @@ import { categoriaExamen } from '@/lib/categorias-examen';
 import { formatoFechaCorta, formatoHoraDate } from '@/lib/fechas';
 import { useCitas } from '@/providers/citas-provider';
 import { useExamenes } from '@/providers/examenes-provider';
+import { useMedicamentos } from '@/providers/medicamentos-provider';
 import { router } from 'expo-router';
-import { CalendarCheck } from 'lucide-react-native';
+import { CalendarCheck, Pill } from 'lucide-react-native';
 import { ScrollView } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -15,6 +16,7 @@ const fechaCitaFmt = new Intl.DateTimeFormat('es', { weekday: 'short', day: 'num
 export default function Historial() {
   const { pasadas } = useCitas();
   const { examenes } = useExamenes();
+  const { terminados } = useMedicamentos();
 
   return (
     <SafeAreaView edges={['top']} className="flex-1 bg-background">
@@ -67,6 +69,29 @@ export default function Historial() {
               />
             );
           })
+        )}
+
+        <Text className="mt-4 text-lg font-bold">Tratamientos terminados</Text>
+        {terminados.length === 0 ? (
+          <Text variant="muted">Los medicamentos aparecerán aquí cuando pase su fecha de fin.</Text>
+        ) : (
+          terminados.map((m) => (
+            <ListRow
+              key={m.id}
+              icon={Pill}
+              iconBgClassName="bg-meds"
+              iconClassName="text-meds-foreground"
+              title={`${m.nombre} ${m.dosis}`}
+              subtitle={`${formatoFechaCorta(m.fecha_inicio)} – ${formatoFechaCorta(m.fecha_fin!)}`}
+              meta={m.notas ?? undefined}
+              onPress={() => router.push({ pathname: '/medicamento', params: { id: m.id } })}
+              right={
+                <Badge variant="secondary">
+                  <Text>Terminado</Text>
+                </Badge>
+              }
+            />
+          ))
         )}
       </ScrollView>
     </SafeAreaView>

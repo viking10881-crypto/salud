@@ -6,6 +6,11 @@ import { createContext, useCallback, useContext, useEffect, useMemo, useState } 
 
 type Resultado = { error: string | null };
 
+export type DatosPerfil = Pick<
+  Perfil,
+  'nombre' | 'apellido' | 'fecha_nacimiento' | 'telefono' | 'tipo_sangre' | 'alergias'
+>;
+
 type AuthContextValue = {
   session: Session | null;
   perfil: Perfil | null;
@@ -17,6 +22,8 @@ type AuthContextValue = {
   recuperarClave: (correo: string) => Promise<Resultado>;
   cerrarSesion: () => Promise<void>;
   recargarPerfil: () => Promise<void>;
+  /** Guarda "Mis Datos". Lanza un error si falla. */
+  actualizarPerfil: (datos: DatosPerfil) => Promise<void>;
 };
 
 const AuthContext = createContext<AuthContextValue | null>(null);
@@ -93,6 +100,17 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         await supabase.auth.signOut();
       },
       recargarPerfil: () => cargarPerfil(userId),
+      async actualizarPerfil(datos) {
+        if (!userId) throw new Error('No hay sesión activa');
+        const { data, error } = await supabase
+          .from('perfiles')
+          .update(datos)
+          .eq('id', userId)
+          .select('*')
+          .single();
+        if (error) throw error;
+        setPerfilCargado(data);
+      },
     }),
     [session, perfil, cargando, userId, cargarPerfil]
   );

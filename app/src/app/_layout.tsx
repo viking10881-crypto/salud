@@ -77,6 +77,7 @@ function Navegacion() {
           <Stack.Screen name="cita" />
           <Stack.Screen name="examenes" />
           <Stack.Screen name="examen" />
+          <Stack.Screen name="mis-datos" />
         </Stack.Protected>
       </Stack>
     </>

@@ -40,3 +40,13 @@ export const mismoDia = (a: Date, b: Date) => aFechaISO(a) === aFechaISO(b);
 
 export const DIAS_CORTOS = ['D', 'L', 'M', 'X', 'J', 'V', 'S']; // 0 = domingo (como Date.getDay)
 export const DIAS_LARGOS = ['domingo', 'lunes', 'martes', 'miércoles', 'jueves', 'viernes', 'sábado'];
+
+/** Edad cumplida en años a partir de una fecha 'YYYY-MM-DD'. */
+export function edadDesde(fechaNacimiento: string, hoy: Date = new Date()): number {
+  const n = deFechaISO(fechaNacimiento);
+  let edad = hoy.getFullYear() - n.getFullYear();
+  const yaCumplio =
+    hoy.getMonth() > n.getMonth() || (hoy.getMonth() === n.getMonth() && hoy.getDate() >= n.getDate());
+  if (!yaCumplio) edad -= 1;
+  return edad;
+}

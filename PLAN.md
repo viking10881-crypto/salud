@@ -12,6 +12,8 @@
 - **Avisos repetidos de medicamentos:** cada 10 minutos, hasta 3 veces, mientras la dosis no se marque (se calculan para las próximas 48 h).
 - **Paso 4 · Expediente médico** (implementado el 2026-11-17, falta probarlo en el celular): subir con foto, galería o archivo PDF al bucket privado; categorías y filtro; miniaturas con URLs firmadas; abrir, editar y eliminar; Historial con los exámenes reales.
 
+- **Paso 5 · Historial y perfil** (implementado el 2026-11-17, falta probarlo en el celular): pantalla "Mis Datos" para editar nombre, apellido, fecha de nacimiento (con la edad), teléfono, tipo de sangre y alergias; el Perfil muestra la edad, el tipo de sangre, el teléfono y las alergias; el Historial muestra los tratamientos terminados. No requiere SQL nuevo.
+
 ## ⏭️ Pendiente (en orden)
 
 ### ~~Paso 2 · Recordatorios de medicamentos~~ (ver Hecho)
@@ -32,7 +34,7 @@
 - Lista por categoría: laboratorio, radiografía, ecografía, fórmula, diagnóstico.
 - Ver y descargar los archivos con URLs firmadas.
 
-### Paso 5 · Historial y perfil
+### ~~Paso 5 · Historial y perfil~~ (ver Hecho)
 - Historial con datos reales: citas pasadas, exámenes y tratamientos terminados.
 - Editar "Mis Datos": fecha de nacimiento, teléfono, tipo de sangre y alergias.
 
