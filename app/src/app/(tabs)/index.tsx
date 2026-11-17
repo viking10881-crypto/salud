@@ -3,9 +3,11 @@ import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Icon } from '@/components/ui/icon';
 import { Text } from '@/components/ui/text';
-import { citas, dosis, formatoFecha, formatoHora } from '@/data/mock';
+import { citas, formatoFecha, formatoHora } from '@/data/mock';
+import { DIAS_LARGOS, formatoHoraDate, mismoDia } from '@/lib/fechas';
 import { cn } from '@/lib/utils';
 import { useAuth } from '@/providers/auth-provider';
+import { useMedicamentos } from '@/providers/medicamentos-provider';
 import { type Href, router } from 'expo-router';
 import {
   Bell,
@@ -30,7 +32,20 @@ export default function Inicio() {
   const { perfil } = useAuth();
   const nombre = perfil?.nombre || 'bienvenido';
   const proximaCita = citas[0];
-  const proximaDosis = dosis[0];
+  const { proxima, dosisHoy } = useMedicamentos();
+  const cuandoDosis = proxima
+    ? mismoDia(proxima.programada, new Date())
+      ? formatoHoraDate(proxima.programada)
+      : `${DIAS_LARGOS[proxima.programada.getDay()]}, ${formatoHoraDate(proxima.programada)}`
+    : null;
+  const pendientesHoy = dosisHoy.filter((d) => d.estado === 'pendiente' || d.estado === 'atrasada').length;
+  const mensajeDoctora = proxima
+    ? proxima.estado === 'atrasada'
+      ? `Tienes pendiente tu ${proxima.medicamento.nombre}. ¡Tómalo cuando puedas!`
+      : `Recuerda tomar tu ${proxima.medicamento.nombre} ${proxima.medicamento.dosis} (${cuandoDosis}). ¡Tú puedes!`
+    : dosisHoy.length > 0 && pendientesHoy === 0
+      ? '¡Excelente! Ya tomaste todas tus dosis de hoy.'
+      : 'Agrega tus medicamentos y yo te recordaré cada dosis.';
 
   return (
     <SafeAreaView edges={['top']} className="flex-1 bg-background">
@@ -52,7 +67,7 @@ export default function Inicio() {
           <View className="flex-1">
             <Text className="font-semibold text-secondary-foreground">Dra. Salud</Text>
             <Text className="text-sm text-secondary-foreground">
-              Recuerda tomar tu {proximaDosis.medicamento} a las {proximaDosis.hora}. ¡Tú puedes!
+              {mensajeDoctora}
             </Text>
           </View>
         </View>
@@ -79,9 +94,19 @@ export default function Inicio() {
               <Icon as={Pill} size={28} className="text-heart" />
             </View>
             <View className="flex-1">
-              <Text className="text-sm font-semibold text-alerta-foreground">Próximo medicamento</Text>
-              <Text className="text-lg font-bold">{proximaDosis.medicamento}</Text>
-              <Text>{proximaDosis.hora}</Text>
+              <Text className="text-sm font-semibold text-alerta-foreground">
+                {proxima?.estado === 'atrasada' ? 'Dosis atrasada' : 'Próximo medicamento'}
+              </Text>
+              {proxima ? (
+                <>
+                  <Text className="text-lg font-bold">
+                    {proxima.medicamento.nombre} {proxima.medicamento.dosis}
+                  </Text>
+                  <Text>{cuandoDosis}</Text>
+                </>
+              ) : (
+                <Text className="text-lg font-bold">Agrega tus medicamentos</Text>
+              )}
             </View>
             <Icon as={ChevronRight} size={22} className="text-muted-foreground" />
           </View>

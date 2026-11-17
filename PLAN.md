@@ -5,9 +5,11 @@
 - **Paso 0 · Base del proyecto:** Expo SDK 58, Expo Router, NativeWind, componentes shadcn (React Native Reusables) y pantallas iniciales con datos de ejemplo.
 - **Paso 1 · Supabase:** registro, inicio de sesión, confirmación por correo, recuperar contraseña y cerrar sesión. Sesión cifrada y rutas protegidas. Base de datos con RLS (`supabase/migrations/`), ya aplicada en el proyecto de Supabase. Probado en el celular el 2026-11-16.
 
+- **Paso 2 · Recordatorios de medicamentos** (implementado el 2026-11-17, falta probarlo en el celular): formulario para agregar y editar, la pantalla Mis Medicamentos con datos reales, el registro de tomas, notificaciones locales y el cumplimiento en Mi Salud.
+
 ## ⏭️ Pendiente (en orden)
 
-### Paso 2 · Recordatorios de medicamentos
+### ~~Paso 2 · Recordatorios de medicamentos~~ (ver Hecho)
 1. Formulario para **agregar y editar** medicamentos: nombre, dosis, cantidad, horarios del día, días de la semana, fecha de inicio y de fin, y notas. Se guarda en la tabla `medicamentos`.
 2. Pantalla **Mis Medicamentos** con datos reales: la próxima dosis, las dosis del día y el botón "Marcar como tomado", que guarda en la tabla `tomas`.
 3. **Notificaciones locales** con `expo-notifications` a la hora de cada dosis, también con la app cerrada. Se reprograman al agregar, editar o desactivar un medicamento.

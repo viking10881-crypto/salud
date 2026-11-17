@@ -7,4 +7,11 @@ module.exports = defineConfig([
   {
     ignores: ['dist/*'],
   },
+  {
+    rules: {
+      // TypeScript ya valida los imports de namespace; esta regla da falsos positivos
+      // con enums compilados (p. ej. Notifications.AndroidImportance de expo-notifications).
+      'import/namespace': 'off',
+    },
+  },
 ]);
