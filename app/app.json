@@ -50,10 +50,11 @@
       [
         "expo-image-picker",
         {
-          "photosPermission": "Salud+ necesita acceso a tus fotos para adjuntar ex\u00e1menes m\u00e9dicos.",
-          "cameraPermission": "Salud+ necesita la c\u00e1mara para fotografiar tus ex\u00e1menes y f\u00f3rmulas m\u00e9dicas."
+          "photosPermission": "Salud+ necesita acceso a tus fotos para adjuntar exámenes médicos.",
+          "cameraPermission": "Salud+ necesita la cámara para fotografiar tus exámenes y fórmulas médicas."
         }
-      ]
+      ],
+      "expo-asset"
     ],
     "experiments": {
       "typedRoutes": true,

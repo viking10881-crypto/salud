@@ -13,6 +13,8 @@
 - **Paso 4 · Expediente médico** (implementado el 2026-11-17, falta probarlo en el celular): subir con foto, galería o archivo PDF al bucket privado; categorías y filtro; miniaturas con URLs firmadas; abrir, editar y eliminar; Historial con los exámenes reales.
 
 - **Paso 5 · Historial y perfil** (implementado el 2026-11-17, falta probarlo en el celular): pantalla "Mis Datos" para editar nombre, apellido, fecha de nacimiento (con la edad), teléfono, tipo de sangre y alergias; el Perfil muestra la edad, el tipo de sangre, el teléfono y las alergias; el Historial muestra los tratamientos terminados. No requiere SQL nuevo.
+- **Paso 6 · Avatar 3D de la doctora** (implementado el 2026-11-17, falta probarlo en el celular): el STL se redujo de 1,4 millones a 40 000 triángulos (417 KB) y va incrustado en la app; se muestra con React Three Fiber + expo-gl en Bienvenida, Inicio de sesión, Inicio y Perfil, con un balanceo suave, colores de la app y busto o medio cuerpo según el tamaño. Si el 3D falla se ve el avatar 2D. La animación se pausa en las pantallas que no se ven. El STL salió del repositorio (`avatar/*.stl` en `.gitignore`); los pasos para regenerarlo están en `app/scripts/avatar/README.md`.
+  - La doctora es una enfermera genérica (no un personaje de terceros).
 
 ## ⏭️ Pendiente (en orden)
 
@@ -38,7 +40,7 @@
 - Historial con datos reales: citas pasadas, exámenes y tratamientos terminados.
 - Editar "Mis Datos": fecha de nacimiento, teléfono, tipo de sangre y alergias.
 
-### Paso 6 · Avatar 3D de la doctora virtual
+### ~~Paso 6 · Avatar 3D de la doctora virtual~~ (ver Hecho)
 - Convertir `avatar/enfermera-app.stl` (68 MB) a **GLB** comprimido (con Blender y Draco), con colores y materiales.
 - Mostrarlo con React Three Fiber en Bienvenida, Inicio y Perfil. Reemplaza a `DoctoraAvatar`.
 - Mensajes de la doctora: bienvenida, recordatorios y felicitaciones.
@@ -56,3 +58,5 @@
 - **Enlace del correo de confirmación:** hoy abre `localhost:3000`. Configurar en Supabase la *Site URL* y las *Redirect URLs*: un deep link `saludplus://` o una página web.
 - Inicio de sesión con **Google** y **Apple**: los botones ya están, desactivados.
 - Borrar la carpeta local `app-sdk58-respaldo/`, que ya no se usa.
+- El STL de 71 MB sigue en el **historial** de git (primer commit). Para que el repositorio pese menos habría que reescribir el historial (`git filter-repo`) y hacer *force push*; solo si el usuario lo pide.
+- Avatar: colores por zonas (cabello, piel, uniforme) y expresiones o gestos, si se quiere más adelante.

@@ -10,3 +10,6 @@ app-sdk58-respaldo/
 
 # Sistema
 .DS_Store
+
+# Modelo 3D original (71 MB): se guarda aparte, la app usa la versión reducida
+avatar/*.stl
