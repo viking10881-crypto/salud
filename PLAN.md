@@ -52,11 +52,12 @@
 - Sacar el STL del repositorio o pasarlo a Git LFS.
 - Usar un personaje original para la doctora, no uno con derechos de autor de terceros.
 
-### Despliegue (cuando el usuario lo indique)
-- APK de Android o *development build* con EAS. El usuario ya inició sesión en EAS en esta PC.
-- **Decidir antes** el identificador de la app en Android (por ejemplo `com.delasoft.saludplus`), porque no se puede cambiar después de publicar.
-- Configurar `EXPO_PUBLIC_SUPABASE_URL` y `EXPO_PUBLIC_SUPABASE_KEY` como variables de EAS: el `.env` no se sube.
-- Con esa versión propia: alarma de verdad (sonido propio, *alarmClock*/alarma exacta) y el botón "Tomado" en la notificación.
+### Despliegue
+- ✅ (2026-11-17) Identificador Android: **`com.delasoft.saludentusmanos`** (no se puede cambiar después de publicar).
+- ✅ Proyecto EAS `@alucard108.81/salud-plus` (`eas.json`: perfiles development, preview → APK, production). La llave de firma la guarda EAS.
+- ✅ Variables `EXPO_PUBLIC_SUPABASE_URL` y `EXPO_PUBLIC_SUPABASE_KEY` en EAS (development, preview, production).
+- Primer APK de prueba: `npx eas-cli build -p android --profile preview`.
+- Pendiente: alarma de verdad (sonido propio, *alarmClock*/alarma exacta) y el botón "Tomado" en la notificación; publicar en Play Store (perfil production, AAB).
 
 ## 🔧 Detalles pendientes
 - Confirmar en el celular que el error del canal de notificaciones de Android quedó resuelto.
