@@ -87,6 +87,7 @@ function Navegacion() {
         <Stack.Screen name="login" />
         <Stack.Screen name="registro" />
         <Stack.Screen name="recuperar" />
+        <Stack.Screen name="ayuda" />
 
         {/* Con sesión */}
         <Stack.Screen name="(tabs)" options={{ gestureEnabled: false }} />

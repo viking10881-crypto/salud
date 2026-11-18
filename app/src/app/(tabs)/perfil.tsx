@@ -80,7 +80,7 @@ export default function Perfil() {
       label="Tema oscuro"
       right={<Switch checked={oscuro} onCheckedChange={(v) => setColorScheme(v ? 'dark' : 'light')} />}
     />,
-    <Fila key="ayuda" icon={CircleHelp} label="Ayuda y Soporte" onPress={() => {}} />,
+    <Fila key="ayuda" icon={CircleHelp} label="Ayuda y Soporte" onPress={() => router.push('/ayuda')} />,
     <Fila key="salir" icon={LogOut} label="Cerrar Sesión" danger onPress={cerrarSesion} />,
   ];
 

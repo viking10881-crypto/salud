@@ -19,6 +19,7 @@
 - **Centro de notificaciones estilo iOS** (2026-11-17): la campana de Inicio despliega desde arriba un panel con fondo opaco desenfocado (como el Centro de Control) y tarjetas oscuras translúcidas: dosis atrasadas, próximas dosis de hoy y citas de los próximos 7 días. Las dosis se marcan como tomadas desde la tarjeta. Se cierra con la misma campana, con la flecha o deslizando hacia arriba. La campana muestra la cantidad de avisos. El desenfoque en Android necesita Android 12 o superior.
 - **Avatar del médico en las citas** (2026-11-17): si el nombre empieza con "Dr."/"Doctor" se muestra el doctor (`avatar/doctor.png`) y con "Dra."/"Doctora" la doctora, en el formulario, la lista de citas, Inicio e Historial. El formulario tiene botones Doctor/Doctora que ponen el prefijo.
 - **Sin fondo amarillo al autocompletar**: plugin `app/plugins/sin-resaltado-autocompletar.js`. Solo aplica en el APK o development build (en Expo Go sigue el amarillo).
+- **Ayuda y Soporte** (2026-11-17): pantalla `ayuda` con el correo de contacto appsalud6@gmail.com (abre la app de correo con asunto y datos de versión/sistema), preguntas frecuentes y aviso de emergencias (123).
 
 ## ⏭️ Pendiente (en orden)
 
