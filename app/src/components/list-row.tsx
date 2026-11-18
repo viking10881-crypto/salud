@@ -6,6 +6,8 @@ import { Pressable, View } from 'react-native';
 
 type Props = {
   icon: LucideIcon;
+  /** Imagen en lugar del ícono (p. ej. el avatar del médico) */
+  avatar?: React.ReactNode;
   iconClassName?: string;
   iconBgClassName?: string;
   title: string;
@@ -15,15 +17,17 @@ type Props = {
   onPress?: () => void;
 };
 
-export function ListRow({ icon, iconClassName, iconBgClassName, title, subtitle, meta, right, onPress }: Props) {
+export function ListRow({ icon, avatar, iconClassName, iconBgClassName, title, subtitle, meta, right, onPress }: Props) {
   return (
     <Pressable
       onPress={onPress}
       disabled={!onPress}
       className="flex-row items-center gap-3 rounded-2xl border border-border bg-card p-3 active:opacity-80">
-      <View className={cn('h-12 w-12 items-center justify-center rounded-xl bg-secondary', iconBgClassName)}>
-        <Icon as={icon} size={24} className={cn('text-primary', iconClassName)} />
-      </View>
+      {avatar ?? (
+        <View className={cn('h-12 w-12 items-center justify-center rounded-xl bg-secondary', iconBgClassName)}>
+          <Icon as={icon} size={24} className={cn('text-primary', iconClassName)} />
+        </View>
+      )}
       <View className="flex-1">
         <Text className="font-semibold">{title}</Text>
         {subtitle ? <Text className="text-sm text-muted-foreground">{subtitle}</Text> : null}

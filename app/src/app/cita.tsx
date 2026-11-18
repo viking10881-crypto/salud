@@ -1,3 +1,4 @@
+import { AvatarMedico } from '@/components/avatar-medico';
 import { Aviso } from '@/components/aviso';
 import { ScreenHeader } from '@/components/screen-header';
 import { SelectorFechaHora } from '@/components/selector-fecha-hora';
@@ -10,6 +11,7 @@ import { Text } from '@/components/ui/text';
 import { mensajeError } from '@/lib/auth-errors';
 import type { Cita } from '@/lib/database.types';
 import { formatoHoraDate } from '@/lib/fechas';
+import { conPrefijo, tipoMedico } from '@/lib/medico';
 import { asegurarPermiso, describirAntelacion } from '@/lib/notificaciones';
 import { cn } from '@/lib/utils';
 import { TIPOS_CITA } from '@/lib/tipos-cita';
@@ -83,6 +85,7 @@ export default function FormularioCita() {
   const [especialidad, setEspecialidad] = useState(existente?.especialidad ?? '');
   const [tipo, setTipo] = useState<Cita['tipo']>(existente?.tipo ?? 'general');
   const [doctor, setDoctor] = useState(existente?.doctor ?? '');
+  const tipoDoc = tipoMedico(doctor);
   const [lugar, setLugar] = useState(existente?.lugar ?? '');
   const [notas, setNotas] = useState(existente?.notas ?? '');
   const [antelacion, setAntelacion] = useState<number | null>(existente ? existente.recordatorio_minutos : 60);
@@ -195,7 +198,26 @@ export default function FormularioCita() {
           </Seccion>
 
           <Seccion titulo="Doctor(a)">
-            <Input placeholder="Ej. Dra. García" value={doctor} onChangeText={setDoctor} className="h-12 rounded-xl" />
+            <View className="flex-row items-center gap-3">
+              {tipoDoc && <AvatarMedico tipo={tipoDoc} size={48} />}
+              <Input
+                placeholder="Ej. Dra. García"
+                value={doctor}
+                onChangeText={setDoctor}
+                autoCapitalize="words"
+                className="h-12 flex-1 rounded-xl"
+              />
+            </View>
+            <View className="flex-row gap-2">
+              {(['doctor', 'doctora'] as const).map((t) => (
+                <Chip
+                  key={t}
+                  activo={tipoDoc === t}
+                  texto={t === 'doctor' ? 'Doctor' : 'Doctora'}
+                  onPress={() => setDoctor(conPrefijo(doctor, t))}
+                />
+              ))}
+            </View>
           </Seccion>
 
           <Seccion titulo="Lugar">

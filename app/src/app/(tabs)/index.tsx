@@ -1,4 +1,5 @@
 import { CentroNotificaciones } from '@/components/centro-notificaciones';
+import { AvatarMedico } from '@/components/avatar-medico';
 import { DoctoraAvatar } from '@/components/doctora-avatar';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
@@ -6,6 +7,7 @@ import { Icon } from '@/components/ui/icon';
 import { Text } from '@/components/ui/text';
 import { armarAvisos, contarAvisos } from '@/lib/centro-notificaciones';
 import { DIAS_LARGOS, formatoHoraDate, mismoDia } from '@/lib/fechas';
+import { tipoMedico } from '@/lib/medico';
 import { cn } from '@/lib/utils';
 import { useAuth } from '@/providers/auth-provider';
 import { useCitas } from '@/providers/citas-provider';
@@ -42,6 +44,7 @@ export default function Inicio() {
   const { perfil } = useAuth();
   const nombre = perfil?.nombre || 'bienvenido';
   const { proxima: proximaCita, proximas } = useCitas();
+  const medicoCita = tipoMedico(proximaCita?.doctor);
   const { proxima, dosisHoy } = useMedicamentos();
 
   // Centro de notificaciones: "ahora" se toma al abrirlo (no durante el render)
@@ -117,9 +120,13 @@ export default function Inicio() {
             {/* Próxima cita */}
             <Pressable onPress={() => router.push('/citas')} className="active:opacity-80">
               <Card className="flex-row items-center gap-4 rounded-3xl p-4">
-                <View className="h-14 w-14 items-center justify-center rounded-2xl bg-citas">
-                  <Icon as={CalendarDays} size={28} className="text-citas-foreground" />
-                </View>
+                {medicoCita ? (
+                  <AvatarMedico tipo={medicoCita} size={56} />
+                ) : (
+                  <View className="h-14 w-14 items-center justify-center rounded-2xl bg-citas">
+                    <Icon as={CalendarDays} size={28} className="text-citas-foreground" />
+                  </View>
+                )}
                 <View className="flex-1">
                   <Text className="text-sm text-muted-foreground">Próxima cita médica</Text>
                   {proximaCita ? (

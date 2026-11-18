@@ -1,8 +1,10 @@
+import { AvatarMedico } from '@/components/avatar-medico';
 import { ListRow } from '@/components/list-row';
 import { Badge } from '@/components/ui/badge';
 import { Text } from '@/components/ui/text';
 import { categoriaExamen } from '@/lib/categorias-examen';
 import { formatoFechaCorta, formatoHoraDate } from '@/lib/fechas';
+import { tipoMedico } from '@/lib/medico';
 import { useCitas } from '@/providers/citas-provider';
 import { useExamenes } from '@/providers/examenes-provider';
 import { useMedicamentos } from '@/providers/medicamentos-provider';
@@ -31,6 +33,7 @@ export default function Historial() {
             <ListRow
               key={c.id}
               icon={CalendarCheck}
+              avatar={tipoMedico(c.doctor) ? <AvatarMedico tipo={tipoMedico(c.doctor)!} size={48} /> : undefined}
               iconBgClassName="bg-citas"
               iconClassName="text-citas-foreground"
               title={c.especialidad}

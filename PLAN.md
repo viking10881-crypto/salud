@@ -17,6 +17,8 @@
   - **Foto de perfil:** en Perfil va la foto del usuario (o sus iniciales). Al tocarla se puede tomar, elegir de la galería (recortada en cuadrado) o quitar. Se guarda en el bucket privado `examenes`, en `<user_id>/perfil/`, y la ruta en `perfiles.avatar_url`. No requiere SQL nuevo.
   - ⚠️ Antes de publicar la app, confirmar que la ilustración se puede usar (licencia o autoría).
 - **Centro de notificaciones estilo iOS** (2026-11-17): la campana de Inicio despliega desde arriba un panel con fondo opaco desenfocado (como el Centro de Control) y tarjetas oscuras translúcidas: dosis atrasadas, próximas dosis de hoy y citas de los próximos 7 días. Las dosis se marcan como tomadas desde la tarjeta. Se cierra con la misma campana, con la flecha o deslizando hacia arriba. La campana muestra la cantidad de avisos. El desenfoque en Android necesita Android 12 o superior.
+- **Avatar del médico en las citas** (2026-11-17): si el nombre empieza con "Dr."/"Doctor" se muestra el doctor (`avatar/doctor.png`) y con "Dra."/"Doctora" la doctora, en el formulario, la lista de citas, Inicio e Historial. El formulario tiene botones Doctor/Doctora que ponen el prefijo.
+- **Sin fondo amarillo al autocompletar**: plugin `app/plugins/sin-resaltado-autocompletar.js`. Solo aplica en el APK o development build (en Expo Go sigue el amarillo).
 
 ## ⏭️ Pendiente (en orden)
 
@@ -57,7 +59,9 @@
 
 ## 🔧 Detalles pendientes
 - Confirmar en el celular que el error del canal de notificaciones de Android quedó resuelto.
-- **Enlace del correo de confirmación:** hoy abre `localhost:3000`. Configurar en Supabase la *Site URL* y las *Redirect URLs*: un deep link `saludplus://` o una página web.
+- ~~Enlace del correo de confirmación~~ (2026-11-17): el registro y "Recuperar contraseña" envían `emailRedirectTo`/`redirectTo` con el deep link de la app (`saludplus://` o `exp://…/--/` en Expo Go). La app crea la sesión con el enlace; si es de recuperación, abre "Nueva contraseña".
+  - ⚠️ En Supabase → Authentication → URL Configuration: *Site URL* `saludplus://` y en *Redirect URLs* agregar `saludplus://**` y `exp://**`. Sin eso, Supabase sigue mandando a `localhost:3000`.
 - Inicio de sesión con **Google** y **Apple**: los botones ya están, desactivados.
 - Borrar la carpeta local `app-sdk58-respaldo/`, que ya no se usa.
+- Antes de publicar, confirmar el uso de las ilustraciones del doctor y la doctora (licencia o autoría).
 - Los STL de 71 MB ya no se usan; siguen en el **historial** de git (primer commit). Para que el repositorio pese menos habría que reescribir el historial (`git filter-repo`) y hacer *force push*; solo si el usuario lo pide.

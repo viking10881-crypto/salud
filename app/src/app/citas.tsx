@@ -1,3 +1,4 @@
+import { AvatarMedico } from '@/components/avatar-medico';
 import { Aviso } from '@/components/aviso';
 import { CalendarioMes } from '@/components/calendario-mes';
 import { ScreenHeader } from '@/components/screen-header';
@@ -8,6 +9,7 @@ import { Icon } from '@/components/ui/icon';
 import { Text } from '@/components/ui/text';
 import type { Cita } from '@/lib/database.types';
 import { aFechaISO, formatoHoraDate } from '@/lib/fechas';
+import { tipoMedico } from '@/lib/medico';
 import { cn } from '@/lib/utils';
 import { tipoCita } from '@/lib/tipos-cita';
 import { useCitas } from '@/providers/citas-provider';
@@ -33,13 +35,18 @@ const editar = (c: Cita) => router.push({ pathname: '/cita', params: { id: c.id 
 
 function FilaCita({ cita, onCompletar, ocupado }: { cita: Cita; onCompletar?: () => void; ocupado?: boolean }) {
   const f = new Date(cita.fecha);
+  const medico = tipoMedico(cita.doctor);
   return (
     <Pressable
       onPress={() => editar(cita)}
       className={cn('flex-row items-center gap-3 rounded-2xl border border-border bg-card p-3 active:opacity-80', cita.completada && 'opacity-70')}>
-      <View className="h-12 w-12 items-center justify-center rounded-xl bg-citas">
-        <Icon as={tipoCita(cita.tipo).icono} size={24} className="text-citas-foreground" />
-      </View>
+      {medico ? (
+        <AvatarMedico tipo={medico} size={48} />
+      ) : (
+        <View className="h-12 w-12 items-center justify-center rounded-xl bg-citas">
+          <Icon as={tipoCita(cita.tipo).icono} size={24} className="text-citas-foreground" />
+        </View>
+      )}
       <View className="flex-1">
         <Text className="font-semibold">{capital(fechaCortaFmt.format(f))}</Text>
         <Text className="text-sm text-muted-foreground">
@@ -66,6 +73,7 @@ function FilaCita({ cita, onCompletar, ocupado }: { cita: Cita; onCompletar?: ()
 export default function Citas() {
   const { citas, proximas, pasadas, proxima, cargando, error, recargar, completar } = useCitas();
   const [hoy] = useState(() => new Date());
+  const medicoProxima = tipoMedico(proxima?.doctor);
   const [mes, setMes] = useState(() => new Date());
   const [dia, setDia] = useState<string | null>(null);
   const [verAnteriores, setVerAnteriores] = useState(false);
@@ -147,9 +155,13 @@ export default function Citas() {
               {proxima && (
                 <Pressable onPress={() => editar(proxima)} className="active:opacity-80">
                   <Card className="flex-row gap-4 rounded-3xl bg-secondary p-5">
-                    <View className="h-14 w-14 items-center justify-center rounded-2xl bg-card">
-                      <Icon as={CalendarDays} size={28} className="text-primary" />
-                    </View>
+                    {medicoProxima ? (
+                      <AvatarMedico tipo={medicoProxima} size={64} />
+                    ) : (
+                      <View className="h-14 w-14 items-center justify-center rounded-2xl bg-card">
+                        <Icon as={CalendarDays} size={28} className="text-primary" />
+                      </View>
+                    )}
                     <View className="flex-1 gap-0.5">
                       <Text className="text-sm text-secondary-foreground">Próxima cita</Text>
                       <Text className="font-semibold">{capital(fechaFmt.format(new Date(proxima.fecha)))}</Text>

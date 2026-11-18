@@ -1,4 +1,5 @@
 import { mensajeError } from '@/lib/auth-errors';
+import { urlRetorno } from '@/lib/enlaces-auth';
 import type { Perfil } from '@/lib/database.types';
 import { type ArchivoLocal, BUCKET, leerBytes } from '@/lib/examenes-api';
 import { supabase, supabaseConfigurado } from '@/lib/supabase';
@@ -22,6 +23,10 @@ type AuthContextValue = {
   >;
   recuperarClave: (correo: string) => Promise<Resultado>;
   cerrarSesion: () => Promise<void>;
+  /** true mientras el usuario entró por el enlace de "recuperar contraseña" y debe crear una nueva */
+  recuperandoClave: boolean;
+  iniciarRecuperacion: () => void;
+  cambiarClave: (nueva: string) => Promise<Resultado>;
   recargarPerfil: () => Promise<void>;
   /** Guarda "Mis Datos". Lanza un error si falla. */
   actualizarPerfil: (datos: DatosPerfil) => Promise<void>;
@@ -35,6 +40,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [session, setSession] = useState<Session | null>(null);
   const [perfilCargado, setPerfilCargado] = useState<Perfil | null>(null);
   const [cargando, setCargando] = useState(supabaseConfigurado);
+  const [recuperandoClave, setRecuperandoClave] = useState(false);
 
   const cargarPerfil = useCallback(async (userId: string | undefined) => {
     if (!userId) return;
@@ -87,7 +93,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         const { data, error } = await supabase.auth.signUp({
           email: correo.trim(),
           password: clave,
-          options: { data: { nombre: nombre.trim(), apellido: apellido.trim() } },
+          options: {
+            data: { nombre: nombre.trim(), apellido: apellido.trim() },
+            // El enlace de confirmación del correo vuelve a la app
+            emailRedirectTo: urlRetorno(),
+          },
         });
         return {
           error: error ? mensajeError(error) : null,
@@ -96,11 +106,19 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         };
       },
       async recuperarClave(correo) {
-        const { error } = await supabase.auth.resetPasswordForEmail(correo.trim());
+        const { error } = await supabase.auth.resetPasswordForEmail(correo.trim(), { redirectTo: urlRetorno() });
         return { error: error ? mensajeError(error) : null };
       },
       async cerrarSesion() {
+        setRecuperandoClave(false);
         await supabase.auth.signOut();
+      },
+      recuperandoClave,
+      iniciarRecuperacion: () => setRecuperandoClave(true),
+      async cambiarClave(nueva) {
+        const { error } = await supabase.auth.updateUser({ password: nueva });
+        if (!error) setRecuperandoClave(false);
+        return { error: error ? mensajeError(error) : null };
       },
       recargarPerfil: () => cargarPerfil(userId),
       async actualizarPerfil(datos) {
@@ -141,7 +159,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         if (anterior) await supabase.storage.from(BUCKET).remove([anterior]).catch(() => {});
       },
     }),
-    [session, perfil, cargando, userId, cargarPerfil]
+    [session, perfil, cargando, userId, cargarPerfil, recuperandoClave]
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
