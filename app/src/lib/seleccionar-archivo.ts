@@ -19,17 +19,19 @@ function deImagen(a: ImagePicker.ImagePickerAsset, prefijo: string): ArchivoLoca
   };
 }
 
-export async function seleccionarArchivo(origen: Origen): Promise<Seleccion> {
+/** `cuadrada`: deja recortar la foto en cuadrado (para la foto de perfil). */
+export async function seleccionarArchivo(origen: Origen, opciones?: { cuadrada?: boolean }): Promise<Seleccion> {
+  const recorte = opciones?.cuadrada ? { allowsEditing: true, aspect: [1, 1] as [number, number] } : {};
   if (origen === 'camara') {
     const permiso = await ImagePicker.requestCameraPermissionsAsync();
     if (!permiso.granted) return { sinPermiso: 'Permite el acceso a la cámara en los ajustes del teléfono.' };
-    const r = await ImagePicker.launchCameraAsync({ mediaTypes: ['images'], quality: 0.7, base64: true });
+    const r = await ImagePicker.launchCameraAsync({ mediaTypes: ['images'], quality: 0.7, base64: true, ...recorte });
     if (r.canceled || !r.assets[0]) return { cancelado: true };
     return { archivo: deImagen(r.assets[0], 'foto') };
   }
 
   if (origen === 'galeria') {
-    const r = await ImagePicker.launchImageLibraryAsync({ mediaTypes: ['images'], quality: 0.8, base64: true });
+    const r = await ImagePicker.launchImageLibraryAsync({ mediaTypes: ['images'], quality: 0.8, base64: true, ...recorte });
     if (r.canceled || !r.assets[0]) return { cancelado: true };
     return { archivo: deImagen(r.assets[0], 'imagen') };
   }

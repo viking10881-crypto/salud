@@ -52,7 +52,7 @@ const idAleatorio = () => `${Date.now().toString(36)}${Math.random().toString(36
  * de lectura sobre la carpeta del selector ("Missing 'READ' permission"), así que se
  * prueba en orden: base64 del selector → expo-file-system → fetch.
  */
-async function leerBytes(archivo: ArchivoLocal): Promise<ArrayBuffer> {
+export async function leerBytes(archivo: ArchivoLocal): Promise<ArrayBuffer> {
   if (archivo.base64) return base64ABytes(archivo.base64);
   if (Platform.OS === 'web') return (await fetch(archivo.uri)).arrayBuffer();
   try {

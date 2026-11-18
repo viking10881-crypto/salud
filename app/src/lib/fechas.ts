@@ -50,3 +50,17 @@ export function edadDesde(fechaNacimiento: string, hoy: Date = new Date()): numb
   if (!yaCumplio) edad -= 1;
   return edad;
 }
+
+/** Tiempo relativo corto, como en las notificaciones: "ahora", "hace 5 min", "en 2 h", "mañana"… */
+export function tiempoRelativo(fecha: Date, ahora: Date = new Date()): string {
+  const min = Math.round((fecha.getTime() - ahora.getTime()) / 60000);
+  const abs = Math.abs(min);
+  if (abs < 1) return 'ahora';
+  const pref = min < 0 ? 'hace' : 'en';
+  if (abs < 60) return `${pref} ${abs} min`;
+  if (abs < 24 * 60 && mismoDia(fecha, ahora)) return `${pref} ${Math.round(abs / 60)} h`;
+  const dias = Math.round((inicioDelDia(fecha).getTime() - inicioDelDia(ahora).getTime()) / 86400000);
+  if (dias === 1) return 'mañana';
+  if (dias === -1) return 'ayer';
+  return dias > 0 ? `en ${dias} días` : `hace ${-dias} días`;
+}

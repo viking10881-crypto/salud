@@ -1,5 +1,6 @@
 import { mensajeError } from '@/lib/auth-errors';
 import type { Perfil } from '@/lib/database.types';
+import { type ArchivoLocal, BUCKET, leerBytes } from '@/lib/examenes-api';
 import { supabase, supabaseConfigurado } from '@/lib/supabase';
 import type { Session } from '@supabase/supabase-js';
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
@@ -24,6 +25,8 @@ type AuthContextValue = {
   recargarPerfil: () => Promise<void>;
   /** Guarda "Mis Datos". Lanza un error si falla. */
   actualizarPerfil: (datos: DatosPerfil) => Promise<void>;
+  /** Sube (o quita, con null) la foto de perfil. Lanza un error si falla. */
+  cambiarFoto: (archivo: ArchivoLocal | null) => Promise<void>;
 };
 
 const AuthContext = createContext<AuthContextValue | null>(null);
@@ -110,6 +113,32 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           .single();
         if (error) throw error;
         setPerfilCargado(data);
+      },
+      async cambiarFoto(archivo) {
+        if (!userId) throw new Error('No hay sesión activa');
+        const anterior = perfil?.avatar_url ?? null;
+        let ruta: string | null = null;
+        if (archivo) {
+          // Va en la carpeta privada del usuario: <user_id>/perfil/foto-<marca>.jpg
+          ruta = `${userId}/perfil/foto-${Date.now().toString(36)}.jpg`;
+          const bytes = await leerBytes(archivo);
+          const { error: errorSubida } = await supabase.storage
+            .from(BUCKET)
+            .upload(ruta, bytes, { contentType: archivo.mimeType ?? 'image/jpeg' });
+          if (errorSubida) throw errorSubida;
+        }
+        const { data, error } = await supabase
+          .from('perfiles')
+          .update({ avatar_url: ruta })
+          .eq('id', userId)
+          .select('*')
+          .single();
+        if (error) {
+          if (ruta) await supabase.storage.from(BUCKET).remove([ruta]);
+          throw error;
+        }
+        setPerfilCargado(data);
+        if (anterior) await supabase.storage.from(BUCKET).remove([anterior]).catch(() => {});
       },
     }),
     [session, perfil, cargando, userId, cargarPerfil]

@@ -13,8 +13,10 @@
 - **Paso 4 · Expediente médico** (implementado el 2026-11-17, falta probarlo en el celular): subir con foto, galería o archivo PDF al bucket privado; categorías y filtro; miniaturas con URLs firmadas; abrir, editar y eliminar; Historial con los exámenes reales.
 
 - **Paso 5 · Historial y perfil** (implementado el 2026-11-17, falta probarlo en el celular): pantalla "Mis Datos" para editar nombre, apellido, fecha de nacimiento (con la edad), teléfono, tipo de sangre y alergias; el Perfil muestra la edad, el tipo de sangre, el teléfono y las alergias; el Historial muestra los tratamientos terminados. No requiere SQL nuevo.
-- **Paso 6 · Avatar 3D de la doctora** (implementado el 2026-11-17, falta probarlo en el celular): el STL se redujo de 1,4 millones a 40 000 triángulos (417 KB) y va incrustado en la app; se muestra con React Three Fiber + expo-gl en Bienvenida, Inicio de sesión, Inicio y Perfil, con un balanceo suave, colores de la app y busto o medio cuerpo según el tamaño. Si el 3D falla se ve el avatar 2D. La animación se pausa en las pantallas que no se ven. El STL salió del repositorio (`avatar/*.stl` en `.gitignore`); los pasos para regenerarlo están en `app/scripts/avatar/README.md`.
-  - La doctora es una enfermera genérica (no un personaje de terceros).
+- **Paso 6 · Avatar de la doctora** (2026-11-17): primero se hizo en 3D (React Three Fiber), pero se cambió por una **ilustración** a pedido del usuario: `avatar/doctora-original.jpg`, recortada a `app/assets/images/doctora.jpg` y centrada en el círculo. Aparece en Bienvenida, Inicio de sesión e Inicio. Se quitaron three, React Three Fiber y expo-gl.
+  - **Foto de perfil:** en Perfil va la foto del usuario (o sus iniciales). Al tocarla se puede tomar, elegir de la galería (recortada en cuadrado) o quitar. Se guarda en el bucket privado `examenes`, en `<user_id>/perfil/`, y la ruta en `perfiles.avatar_url`. No requiere SQL nuevo.
+  - ⚠️ Antes de publicar la app, confirmar que la ilustración se puede usar (licencia o autoría).
+- **Centro de notificaciones estilo iOS** (2026-11-17): la campana de Inicio despliega desde arriba un panel con fondo opaco desenfocado (como el Centro de Control) y tarjetas oscuras translúcidas: dosis atrasadas, próximas dosis de hoy y citas de los próximos 7 días. Las dosis se marcan como tomadas desde la tarjeta. Se cierra con la misma campana, con la flecha o deslizando hacia arriba. La campana muestra la cantidad de avisos. El desenfoque en Android necesita Android 12 o superior.
 
 ## ⏭️ Pendiente (en orden)
 
@@ -40,7 +42,7 @@
 - Historial con datos reales: citas pasadas, exámenes y tratamientos terminados.
 - Editar "Mis Datos": fecha de nacimiento, teléfono, tipo de sangre y alergias.
 
-### ~~Paso 6 · Avatar 3D de la doctora virtual~~ (ver Hecho)
+### ~~Paso 6 · Avatar de la doctora virtual~~ (ver Hecho)
 - Convertir `avatar/enfermera-app.stl` (68 MB) a **GLB** comprimido (con Blender y Draco), con colores y materiales.
 - Mostrarlo con React Three Fiber en Bienvenida, Inicio y Perfil. Reemplaza a `DoctoraAvatar`.
 - Mensajes de la doctora: bienvenida, recordatorios y felicitaciones.
@@ -58,5 +60,4 @@
 - **Enlace del correo de confirmación:** hoy abre `localhost:3000`. Configurar en Supabase la *Site URL* y las *Redirect URLs*: un deep link `saludplus://` o una página web.
 - Inicio de sesión con **Google** y **Apple**: los botones ya están, desactivados.
 - Borrar la carpeta local `app-sdk58-respaldo/`, que ya no se usa.
-- El STL de 71 MB sigue en el **historial** de git (primer commit). Para que el repositorio pese menos habría que reescribir el historial (`git filter-repo`) y hacer *force push*; solo si el usuario lo pide.
-- Avatar: colores por zonas (cabello, piel, uniforme) y expresiones o gestos, si se quiere más adelante.
+- Los STL de 71 MB ya no se usan; siguen en el **historial** de git (primer commit). Para que el repositorio pese menos habría que reescribir el historial (`git filter-repo`) y hacer *force push*; solo si el usuario lo pide.

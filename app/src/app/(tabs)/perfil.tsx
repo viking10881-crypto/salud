@@ -1,4 +1,4 @@
-import { DoctoraAvatar } from '@/components/doctora-avatar';
+import { FotoUsuario } from '@/components/foto-usuario';
 import { Card } from '@/components/ui/card';
 import { Icon } from '@/components/ui/icon';
 import { Separator } from '@/components/ui/separator';
@@ -89,7 +89,7 @@ export default function Perfil() {
       <ScrollView contentContainerClassName="gap-6 p-4">
         <Text variant="h3" className="text-center">Mi Perfil</Text>
         <View className="items-center gap-2">
-          <DoctoraAvatar size={130} />
+          <FotoUsuario size={130} />
           <Text className="text-xl font-bold">{nombreCompleto}</Text>
           <Text variant="muted">{session?.user.email}</Text>
           {(edad !== null || perfil?.tipo_sangre || perfil?.telefono) && (
