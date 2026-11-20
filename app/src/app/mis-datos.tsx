@@ -15,7 +15,7 @@ import { useAuth } from '@/providers/auth-provider';
 import { router } from 'expo-router';
 import { CalendarDays, Check, X } from 'lucide-react-native';
 import { useState } from 'react';
-import { ActivityIndicator, KeyboardAvoidingView, Platform, Pressable, ScrollView, View } from 'react-native';
+import { ActivityIndicator, KeyboardAvoidingView, Pressable, ScrollView, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 type TipoSangre = NonNullable<Perfil['tipo_sangre']>;
@@ -91,7 +91,7 @@ export default function MisDatos() {
   return (
     <SafeAreaView className="flex-1 bg-background">
       <ScreenHeader title="Mis Datos" />
-      <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : undefined} className="flex-1">
+      <KeyboardAvoidingView behavior="padding" className="flex-1">
         <ScrollView contentContainerClassName="gap-5 px-4 pb-10 pt-2" keyboardShouldPersistTaps="handled">
           <View className="flex-row gap-3">
             <View className="flex-1">

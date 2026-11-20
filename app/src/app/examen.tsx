@@ -19,7 +19,7 @@ import { router, useLocalSearchParams } from 'expo-router';
 import * as WebBrowser from 'expo-web-browser';
 import { CalendarDays, ExternalLink, FileText, Trash2 } from 'lucide-react-native';
 import { useState } from 'react';
-import { ActivityIndicator, KeyboardAvoidingView, Platform, Pressable, ScrollView, View } from 'react-native';
+import { ActivityIndicator, KeyboardAvoidingView, Pressable, ScrollView, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 /** Título sugerido a partir del nombre del archivo: "hemograma_2026.pdf" → "hemograma 2026" */
@@ -135,7 +135,7 @@ export default function FormularioExamen() {
   return (
     <SafeAreaView className="flex-1 bg-background">
       <ScreenHeader title={existente ? 'Examen' : 'Subir examen'} />
-      <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : undefined} className="flex-1">
+      <KeyboardAvoidingView behavior="padding" className="flex-1">
         <ScrollView contentContainerClassName="gap-5 px-4 pb-10 pt-2" keyboardShouldPersistTaps="handled">
           {/* Vista previa */}
           <Pressable

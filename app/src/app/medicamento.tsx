@@ -136,7 +136,7 @@ export default function FormularioMedicamento() {
   return (
     <SafeAreaView className="flex-1 bg-background">
       <ScreenHeader title={existente ? 'Editar medicamento' : 'Nuevo medicamento'} />
-      <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : undefined} className="flex-1">
+      <KeyboardAvoidingView behavior="padding" className="flex-1">
         <ScrollView contentContainerClassName="gap-5 px-4 pb-10 pt-2" keyboardShouldPersistTaps="handled">
           <Seccion titulo="Nombre del medicamento *">
             <Input placeholder="Ej. Metformina" value={nombre} onChangeText={setNombre} className="h-12 rounded-xl" />

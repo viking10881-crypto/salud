@@ -12,6 +12,7 @@
     },
     "android": {
       "package": "com.delasoft.saludentusmanos",
+      "softwareKeyboardLayoutMode": "resize",
       "adaptiveIcon": {
         "backgroundColor": "#EFE7FD",
         "foregroundImage": "./assets/images/android-icon-foreground.png",

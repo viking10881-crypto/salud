@@ -8,7 +8,7 @@ import { useAuth } from '@/providers/auth-provider';
 import { router } from 'expo-router';
 import { Lock, Mail, UserRound } from 'lucide-react-native';
 import { useState } from 'react';
-import { ActivityIndicator, KeyboardAvoidingView, Platform, ScrollView, View } from 'react-native';
+import { ActivityIndicator, KeyboardAvoidingView, ScrollView, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function Registro() {
@@ -47,7 +47,7 @@ export default function Registro() {
   return (
     <SafeAreaView className="flex-1 bg-background">
       <ScreenHeader title="Crear cuenta" />
-      <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : undefined} className="flex-1">
+      <KeyboardAvoidingView behavior="padding" className="flex-1">
         <ScrollView contentContainerClassName="gap-4 px-6 pb-8 pt-2" keyboardShouldPersistTaps="handled">
           <Text className="text-muted-foreground">
             Tus datos médicos son privados: solo tú puedes verlos.

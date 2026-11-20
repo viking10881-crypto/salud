@@ -6,7 +6,7 @@ import { CLAVE_MIN } from '@/lib/validacion';
 import { useAuth } from '@/providers/auth-provider';
 import { Lock } from 'lucide-react-native';
 import { useState } from 'react';
-import { ActivityIndicator, KeyboardAvoidingView, Platform, View } from 'react-native';
+import { ActivityIndicator, KeyboardAvoidingView, ScrollView, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 /** Se llega aquí desde el enlace del correo "Recuperar contraseña". */
@@ -32,8 +32,8 @@ export default function NuevaClave() {
 
   return (
     <SafeAreaView className="flex-1 bg-background">
-      <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : undefined} className="flex-1">
-        <View className="flex-1 justify-center gap-4 px-6">
+      <KeyboardAvoidingView behavior="padding" className="flex-1">
+        <ScrollView contentContainerClassName="grow justify-center gap-4 px-6 py-6" keyboardShouldPersistTaps="handled">
           <View className="gap-1">
             <Text className="text-3xl font-bold">Nueva contraseña</Text>
             <Text className="text-muted-foreground">
@@ -64,7 +64,7 @@ export default function NuevaClave() {
           <Button variant="ghost" onPress={cerrarSesion} disabled={guardando}>
             <Text>Cancelar</Text>
           </Button>
-        </View>
+        </ScrollView>
       </KeyboardAvoidingView>
     </SafeAreaView>
   );

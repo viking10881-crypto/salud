@@ -156,7 +156,7 @@ export default function FormularioCita() {
   return (
     <SafeAreaView className="flex-1 bg-background">
       <ScreenHeader title={existente ? 'Editar cita' : 'Nueva cita'} />
-      <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : undefined} className="flex-1">
+      <KeyboardAvoidingView behavior="padding" className="flex-1">
         <ScrollView contentContainerClassName="gap-5 px-4 pb-10 pt-2" keyboardShouldPersistTaps="handled">
           <View className="flex-row gap-3">
             <View className="flex-1">

@@ -10,7 +10,7 @@ import { useAuth } from '@/providers/auth-provider';
 import { Link } from 'expo-router';
 import { Lock, Mail } from 'lucide-react-native';
 import { useState } from 'react';
-import { ActivityIndicator, KeyboardAvoidingView, Platform, ScrollView, View } from 'react-native';
+import { ActivityIndicator, KeyboardAvoidingView, ScrollView, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function Login() {
@@ -33,7 +33,7 @@ export default function Login() {
 
   return (
     <SafeAreaView className="flex-1 bg-background">
-      <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : undefined} className="flex-1">
+      <KeyboardAvoidingView behavior="padding" className="flex-1">
         <ScrollView contentContainerClassName="grow justify-center gap-5 px-6 py-8" keyboardShouldPersistTaps="handled">
           <View className="items-center gap-2">
             <DoctoraAvatar size={150} />
